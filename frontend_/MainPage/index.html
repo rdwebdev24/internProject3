@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>TODO</title>
+     <link rel="stylesheet" href="./index.css">
+     <!-- font awesom -->
+     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+</head>
+<body>
+     <div class="wrapper">
+          <form action="/task">
+               <input type="text">
+               <button id="add" type="submit">Add</button>
+               <button id="deleteAll" type="submit">Delete All</button>
+          </form>
+          <div class="todo_wrapper">
+               <ul class="todo_ul">
+               </ul>
+          </div>
+     </div>
+     <div class="edit_popup">
+          <textarea id="textarea" cols="30" rows="10"></textarea>
+          <button id="saveChange">Save Changes</button>
+          <button id="CancelChange">Cancel</button>
+     </div>
+     <button id="register"><a href="../register/register.html">Register</a></button>
+     <button id="login"><a href="../login/login.html">login</a></button>
+     <script src="./index.js"></script>
+</body>
+</html>
