@@ -1,9 +1,13 @@
-import React from "react";
+import {React,useEffect, useState} from "react";
+import Cards from "./Cards";
+import './main.css'
+import Navbar from "./Navbar";
 
-const Main = () => {
+const Main = ({todo,setTodo,userName}) => {
   return (
     <div>
-      Main
+      <Navbar userName={userName}/>
+      <Cards  todo={todo} setTodo={setTodo}/>
     </div>
   );
 };

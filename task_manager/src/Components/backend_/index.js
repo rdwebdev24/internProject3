@@ -11,8 +11,9 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
-app.use('/task',UserRouter)
+app.use('/task',auth,UserRouter)
 app.use(express.urlencoded({extended:false}))
+
 
 app.get('/register',(req,res)=>{
      res.status(200).send("registerHTML")
