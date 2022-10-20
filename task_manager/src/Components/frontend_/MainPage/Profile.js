@@ -3,7 +3,6 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 const Profile = ({userName}) => {
      const navigate = useNavigate()
-    
      const logout = () =>{
           navigate('/login')
           localStorage.removeItem('userId')

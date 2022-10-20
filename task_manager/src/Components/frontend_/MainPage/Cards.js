@@ -36,7 +36,7 @@ const Cards = ({todo,setTodo}) => {
     .then(res=>res.json())
     .then(data=>{
       console.log('data..created',data);
-      setTodo(data);
+      setTodo(data[0].todoData);
       notify("👏 created","#36b37e");
     })
     .catch(err=>console.log(err)) 
@@ -44,7 +44,7 @@ const Cards = ({todo,setTodo}) => {
 
   const deleteHandler = (id) => {
     const url = "http://localhost:5000/task";
-      fetch(`${url}/${id}`, {
+      fetch(`${url}/${id}/${localStorage.getItem('userId')}`, {
         method: "DELETE",
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -53,7 +53,7 @@ const Cards = ({todo,setTodo}) => {
      })
      .then((res) => res.json())
      .then((data) => {
-       setTodo(data)
+       setTodo(data[0].todoData)
        notify("❕ deleted","#dc3545");
       })
       .catch((err) => console.log(err));
@@ -71,7 +71,7 @@ const Cards = ({todo,setTodo}) => {
       seteditDisp('none')
 
     const url = "http://localhost:5000/task";
-    fetch(`${url}/${updateId}`, {
+    fetch(`${url}/${updateId}/${localStorage.getItem('userId')}`, {
       method: "PUT",
       body: JSON.stringify({data:data}),
       headers: {
@@ -82,7 +82,7 @@ const Cards = ({todo,setTodo}) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setTodo(data)
+        setTodo(data[0].todoData)
       })
       .catch((err) => console.log(err));
   }
@@ -125,7 +125,7 @@ const Cards = ({todo,setTodo}) => {
 
       <div style={{display:editDisp}} className='EditFormWrapper'>
         <form className='edit_form'>
-          <textarea onChange={(e)=>{setData(e.target.value);console.log(data,"___");}} ref={textarea} rows="5" cols="5" type="text" className="form-control" />
+          <textarea onChange={(e)=>{setData(e.target.value)}} ref={textarea} rows="5" cols="5" type="text" className="form-control" />
           <button onClick={UpdateHandler}  type="submit" className="btn btn-primary">Edit</button>
           <button onClick={discardHandler}  type="submit" className="btn btn-primary">Discard</button>
         </form>

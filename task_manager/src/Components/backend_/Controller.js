@@ -36,9 +36,7 @@ const register = async (req,res) => {
           const oldUser = await todo_collection.find({'user.email':email.toLowerCase()});
           if(oldUser.length!=0) {return res.status(400).send({status:409,msg:"User Already exist. Please Log In"})}
           const encryptedPassword = await bcrypt.hash(password,10);
-          const userId = uuid.v4();
-          console.log('userId',userId);
-          console.log('body...',req.body);
+          const userId = new Date().getTime();
           const userData = await todo_collection.create({
                user:{
                     first_name,
@@ -49,7 +47,6 @@ const register = async (req,res) => {
                },
                todoData:[]
           })
-          console.log('user...',userData);
           const token = jwt.sign(
                { user_id: userData._id, email },
                TOKEN_KEY,
@@ -83,10 +80,16 @@ const createTask = async (req, res) => {
      const {id} = req.params;
      console.log(id,task,'body id');
      if(task=='') return req.status(400).send({status:400,msg:'input required'})
-     const ID = new Date().getTime();
-     const newData = { id:ID, data: task.data };
      try {
-          todo_collection.updateOne({"user.userID":id},{$push: {"todoData" : newData}})
+          todo_collection.updateOne({"user.userID":id},{$push: {"todoData" :{data: task.data }}},
+          (error,success)=>{
+               if (error) {
+                    console.log(error);
+                } else {
+                    console.log(success);
+                }
+             }
+          )
           const data = await todo_collection.find({'user.userID':id})
           console.log("crated user data",data);
           res.status(200).send(data);
@@ -97,16 +100,24 @@ const createTask = async (req, res) => {
 };
 
 
-
-
-
-
 const deleteTask = async (req, res) => {
      console.log("deleted");
+     const userId = req.params.id
+     const elementId = req.params._id
+     console.log(req.params," params");
   try {
-     todo_collection.deleteOne({"id":req.params.id},function(){});
-     const data = await todo_collection.find({})
-
+     todo_collection.updateOne({"user.userID":userId},
+     {$pull:{"todoData":{"_id":elementId}}},
+     (error,success)=>{
+          if (error) {
+               console.log(error);
+           } else {
+               console.log(success);
+           }
+        }
+     );
+     const data = await todo_collection.find({'user.userID':userId})
+     console.log("deleted data : ",data);
      res.status(200).send(data);
      } catch (err) {
      console.log(err.Message);
@@ -132,10 +143,34 @@ const deleteAll = async (req,res) => {
 
 const updateTask = async (req, res) => {
      console.log("updated");
+     const userId = req.params.id;
+     const elementId = req.params._id;
+     const updateData = req.body;
   try {
-       todo_collection.updateOne({"id":req.params.id},{"data":req.body.data},function(){})
-       const Data = await todo_collection.find({})
-       res.status(200).send(Data);
+       todo_collection.updateOne(
+        {"user.userID":userId,
+          "todoData":{
+               $elemMatch:{
+                    "_id":elementId
+               }
+            }
+          },
+          {
+               $set:{
+                    "todoData.$.data":updateData.data
+               }
+          },
+       (error,success)=>{
+          if (error) {
+               console.log(error);
+           } else {
+               console.log(success);
+           }
+        }
+       )
+       const data = await todo_collection.find({'user.userID':userId})
+       console.log("updated data : ",data);
+       res.status(200).send(data);
   } catch (err) {
        res.status(503).send(err.Message);
   }

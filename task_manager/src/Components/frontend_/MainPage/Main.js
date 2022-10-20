@@ -4,6 +4,7 @@ import './main.css'
 import Navbar from "./Navbar";
 
 const Main = ({todo,setTodo,userName}) => {
+  
   return (
     <div>
       <Navbar userName={userName}/>

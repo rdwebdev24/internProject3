@@ -10,7 +10,7 @@ import Profile from './Components/frontend_/MainPage/Profile'
 const App = () => {
 
   const [todo,setTodo] = useState([])
-  const [userName,setUserName] = useState('')
+  const [userName,setUserName] = useState('');
 
   useEffect(()=>{
     const url = `http://localhost:5000/task/${localStorage.getItem('userId')}`;
@@ -28,6 +28,7 @@ const App = () => {
       .catch((err) => {
          console.log(err)
     });
+
   },[])
 
   return (
@@ -42,7 +43,6 @@ const App = () => {
               <Route path='/profile' element={<Profile userName={userName}/>}/>
           </Routes>
       </BrowserRouter>
-      {/* <Main/>  */}
     </div>
   )
 }

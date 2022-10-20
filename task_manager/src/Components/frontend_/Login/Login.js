@@ -44,7 +44,8 @@ export default function SignIn() {
       else if(code==200) {
       const userId = data.user.user.userID
       localStorage.setItem('userId',userId)
-        navigate('/main')
+      navigate('/main')
+      window.location.reload()
       }
       else{alert("network error please try again later")}
     })
