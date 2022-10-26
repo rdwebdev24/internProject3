@@ -7,9 +7,7 @@ let todoArray = [];
 const GetTask =  (req, res) => {
    console.log("get");
    res.status(200).send({status:200,msg:"success",data:todoArray})
-   
 }
-
 
 const createTask =  (req, res) => {
      console.log("create",req.body);
