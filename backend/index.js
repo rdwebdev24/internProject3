@@ -1,6 +1,5 @@
 const express = require('express')
 const cors = require('cors');
-const PORT = 5000;
 
 UserRouter =  require('./Route.js')
 const bodyParser = require('body-parser')
@@ -14,7 +13,7 @@ app.use('/',(req,res)=>{
 app.use('/task',UserRouter)
 app.use(express.urlencoded({extended:false}))
 
-
+const PORT = process.env.PORT || 5000;
 app.listen(PORT,()=>{
      console.log(`server is listening on ${PORT}`);
 })
