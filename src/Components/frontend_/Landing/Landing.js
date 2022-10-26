@@ -11,7 +11,7 @@ const Landing = () => {
           <h1>Welcome to</h1>
           <h5>Task Manager <RiTaskFill/>  </h5>
           <div className="signIn_signUp">
-               <Button onClick={()=>navigate('/main')} variant="contained">visit App</Button>
+               <Button onClick={()=>navigate('/main/card')} variant="contained">visit App</Button>
           </div>
      </div>
     </div>
