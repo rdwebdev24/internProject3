@@ -21,7 +21,7 @@ const Main = () => {
           <Link onClick={close2handler} to='/main/pending'>pending</Link>
       </div>
       <Outlet/>
-    </div>
+    </div> 
   );
 };
 
