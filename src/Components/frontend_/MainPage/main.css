@@ -1,0 +1,130 @@
+.CardWrapper{
+     height: 100vh;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     margin: 0 1rem;
+}
+
+.todo_form{
+     display: flex;
+     gap: 1rem;
+}
+
+.form_list_cont{
+     display: flex;
+     gap: 1rem;
+     flex-direction: column;
+     width: 100%;
+     max-width: 50rem;
+}
+
+.list-group{
+     width: 100%;
+     max-width: 50rem;
+     overflow-y: scroll;
+     max-height: 20rem;
+}
+.list-group::-webkit-scrollbar{
+     display: none;
+}
+
+.list_items{
+     display: flex !important;
+     justify-content: space-between !important;
+}
+.list_item_div{
+     display: flex;
+     gap: 1rem;
+}
+.icon{
+     display: flex;
+     gap: 1rem;
+     align-items: center;
+}
+.icon a{
+     cursor: pointer;
+}
+
+.EditFormWrapper{
+     position: absolute;
+     width: 30rem;
+     box-shadow: 0px 2px 8px #333 ;
+     background-color: #fff;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%,-50%);
+     padding: 3rem;
+     border-radius: 10px;
+     display: none;
+}
+
+.edit_form{
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+}
+
+.profileicon{
+     color: #fff !important;
+     text-decoration: none;
+}
+
+.navbar{
+     justify-content: space-between !important;
+}
+
+.sidebar{
+     position: absolute;
+     width: 300px;
+     height: 100%;
+     background-color: #0d6efd;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     z-index: 999;
+     left: -100%;
+     transition: all 0.3s ease-in-out;
+}
+.sidebar a{
+     padding: 0.8rem;
+     width: 100%;
+     text-align: center;
+     font-size: 1.5rem;
+     color: #fff;
+     text-decoration: none;
+     border: 2px solid transparent;
+     border-left: 0;
+     border-right: 0;
+     transition: all 0.3s ease-in-out;
+}
+.sidebar a:hover{
+     border: 2px solid #fff;
+     border-left: 0;
+     border-right: 0;
+     color: #fff;
+}
+.close-sidebar{
+     margin: 1rem;
+     background-color: transparent;
+     border: none;
+     color: #fff;
+     font-size: 2rem;
+}
+.completed,.pendingWrapper{
+     height: 100vh;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+}
+
+h1{
+     padding: 1rem 0;
+}
+
+.para{
+     text-align: center;
+}
+

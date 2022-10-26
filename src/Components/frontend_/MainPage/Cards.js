@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import {AiFillDelete} from 'react-icons/ai'
 import {AiFillEdit} from 'react-icons/ai'
 
-const Cards = ({todo,setTodo}) => {
+const Cards = ({setReload2,todo,setTodo}) => {
   const [reload,setReload] = useState(true);
   const [data,setData] = useState('');
   const [editDisp,seteditDisp] = useState('');
@@ -23,20 +23,21 @@ const Cards = ({todo,setTodo}) => {
   const submitHandler = (e) => {
     e.preventDefault();
     input_ref.current.value = ''
-    const url = `http://localhost:5000/task/${localStorage.getItem('userId')}`;
+    const url = `http://localhost:5000/task`;
     fetch(url,{
       method:"POST",
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-type": "application/json",
-        "Authorization":`Bearer ${localStorage.getItem('token')}`
       },
-      body:JSON.stringify({data:data})
+      body:JSON.stringify({data:data,status:false})
     })
     .then(res=>res.json())
     .then(data=>{
       console.log('data..created',data);
-      setTodo(data[0].todoData);
+      setTodo(data.data);
+      setReload2(true);
+      setData('')
       notify("👏 created","#36b37e");
     })
     .catch(err=>console.log(err)) 
@@ -44,20 +45,39 @@ const Cards = ({todo,setTodo}) => {
 
   const deleteHandler = (id) => {
     const url = "http://localhost:5000/task";
-      fetch(`${url}/${id}/${localStorage.getItem('userId')}`, {
+      fetch(`${url}/${id}`, {
         method: "DELETE",
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Authorization":`Bearer ${localStorage.getItem('token')}`
         },
      })
      .then((res) => res.json())
      .then((data) => {
-       setTodo(data[0].todoData)
-       notify("❕ deleted","#dc3545");
+       setTodo(data.data)
+       setReload2(true);
+       notify("❕ deleted","#eb3941");
       })
       .catch((err) => console.log(err));
     }
+
+  const deleteAllHandler = (e) => {
+    e.preventDefault();
+    const url = "http://localhost:5000/task";
+      fetch(url, {
+        method: "PUT",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+     })
+     .then((res) => res.json())
+     .then((data) => {
+       setTodo(data.data)
+       setReload2(true);
+      })
+      .catch((err) => console.log(err));
+    }
+    
+    
     
     
     const editHandler = (id,data) => {
@@ -66,23 +86,25 @@ const Cards = ({todo,setTodo}) => {
       setData(data)
       textarea.current.value = data;
     }
+
+
     const UpdateHandler = (e) =>{
       e.preventDefault();
       seteditDisp('none')
 
     const url = "http://localhost:5000/task";
-    fetch(`${url}/${updateId}/${localStorage.getItem('userId')}`, {
+    fetch(`${url}/${updateId}`, {
       method: "PUT",
       body: JSON.stringify({data:data}),
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-type": "application/json",
-        "Authorization":`Bearer ${localStorage.getItem('token')}`
       },
-    })
-      .then((res) => res.json())
+    }).then((res) => res.json())
       .then((data) => {
-        setTodo(data[0].todoData)
+        console.log(data,"updated");
+        setTodo(data.data)
+        setReload2(true);
       })
       .catch((err) => console.log(err));
   }
@@ -92,9 +114,28 @@ const Cards = ({todo,setTodo}) => {
     seteditDisp('none')
   }
 
-  useEffect(()=>{
-    setReload(!reload)
-  },[todo])
+
+    const checkRef = useRef();
+    const completedHandler = (item,val) => {
+      const url = "http://localhost:5000/task";
+      fetch(`${url}/${item.id}/status`, {
+        method: "PUT",
+        body: JSON.stringify(item),
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-type": "application/json",
+        },
+      }).then((res) => res.json())
+        .then((data) => {
+          console.log(data,"updated");
+          setTodo(data.data)
+          setReload2(true);
+        })
+        .catch((err) => console.log(err));
+    }
+    useEffect(()=>{
+      setReload(!reload)
+    },[todo])
 
   return (
     <>
@@ -103,19 +144,23 @@ const Cards = ({todo,setTodo}) => {
           <form className='todo_form'>
               <input ref={input_ref} onChange={(e)=>setData(e.target.value)}  type="text" className="form-control" />
               <button onClick={submitHandler} type="submit" className="btn btn-primary">Add</button>
+              <button onClick={deleteAllHandler} type="submit" className="btn btn-primary">Delete All</button>
           </form>
           <ul className="list-group">
-            {todo.map(item=>{
-              const {data,_id} = item;
+            {todo.length?todo.map(item=>{
+              const {data,id,completed} = item;
               return (
-                <li key={_id} className="list-group-item list_items">
-                  <span>{data}</span>
+                <li key={id} className="list-group-item list_items">
+                  <div className='list_item_div'>
+                    <input checked={completed} value={id} ref={checkRef} onChange={(e)=>completedHandler(item)} style={{cursor:"pointer"}} type="checkbox"/>
+                    <span>{data}</span>
+                  </div>
                     <div className="icon">
-                      <a onClick={()=>deleteHandler(_id)}><AiFillDelete/></a>
-                      <a onClick={()=>editHandler(_id,data)}><AiFillEdit/></a>
+                      <a onClick={()=>deleteHandler(id)}><AiFillDelete/></a>
+                      <a onClick={()=>editHandler(id,data)}><AiFillEdit/></a>
                     </div>
                 </li> )
-              })}
+              }):<p>Nothing to show</p>}
           </ul>
         </div>
         <Toaster toastOptions={{
